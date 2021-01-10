@@ -5,12 +5,12 @@
     slice = imread('0001.png');
 
     sigma=min(size(slice))*0.005;
-    fslice = imgaussfilt(im2double(slice), sigma); %sigma is a value od standard deviation
-    figure; imshow(fslice, [min(fslice(:)),max(fslice(:))]); title('Gaussian smoothing');
+    %fslice = imgaussfilt(im2double(slice), sigma); %sigma is a value od standard deviation
+    %figure; imshow(fslice, [min(fslice(:)),max(fslice(:))]); title('Gaussian smoothing');
     
     %%%%%%%%%%%%IZBOLJSAVA%%%%%%%%%%%%%%%
-   % fslice= medfilt2(slice);
-   % figure; imshow(fslice, [min(fslice(:)),max(fslice(:))]); title('Median smoothing');
+    fslice= medfilt2(slice);
+    figure; imshow(fslice, [min(fslice(:)),max(fslice(:))]); title('Median smoothing');
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     % Prewitt mask/cross
@@ -96,15 +96,14 @@
         end
     end
 
-    
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%IZBOLJSAVA%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     figure; imshow(T); title('Hysteresis thresholding');
 
     final = im2uint8(T);
-    imwrite(final, strcat('0001_TG.png'));
+    imwrite(final, strcat('0001_TM.png'));
     %Show final edge detection result
     figure, imshow(final); title('final');
-
+    
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%IZBOLJSAVA%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     TH1 = graythresh(fslice)
     TL1 = TH1/2
 
@@ -127,7 +126,7 @@
     figure; imshow(T1); title('Hysteresis thresholding T1');
 
     final = im2uint8(T1);
-    imwrite(final, strcat('0001_T1G.png'));
+    imwrite(final, strcat('0001_T1M.png'));
     %Show final edge detection result
     figure, imshow(final); title('final1');
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
