@@ -1,8 +1,10 @@
-%files = dir('./images/*.png');
+%files = dir('./slike_med/*.png'); %for medfilt2
+files = dir('./slike/*.png');
 
-%for file = files'
-  %  slice = imread(strcat('./images/', file.name));
-    slice = imread('0001.png');
+for file = files'
+    %slice = imread(strcat('./slike_med/', file.name)); %for medfilt2
+    slice = imread(strcat('./slike_med/', file.name));
+    %slice = imread('0001-100x700.png');
 
     sigma=min(size(slice))*0.005;
     fslice = imgaussfilt(im2double(slice), sigma); %sigma is a value od standard deviation
@@ -73,9 +75,12 @@
 
     % N2: Hysteresis thresholding (separation into strong and weak edge pixels)
     % N3: Form longer edges (edge-linking w/ 8-connectivity of weak pixels to strong pixels)
+    
+    [c, b] = imhist(im)
+    THh = (86); %TH value from histogram
 
     TL = 0.075; %polovica TH
-    TH = 0.175; %doloci otsc
+    TH = 0.15; 
 
     TL = TL*max(max(mag))
     TH = TH*max(max(mag))
@@ -99,7 +104,8 @@
     figure; imshow(T); title('Hysteresis thresholding');
 
     final = im2uint8(T);
-    imwrite(final, strcat('0001_TM.png'));
+    %imwrite(final, strcat('./rezultat_median/', file.name)); %for medfilt2
+    imwrite(final, strcat('./rezultat/', file.name));
     %Show final edge detection result
     figure, imshow(final); title('final');
     
@@ -126,9 +132,11 @@
     figure; imshow(T1); title('Hysteresis thresholding T1');
 
     final = im2uint8(T1);
-    imwrite(final, strcat('0001_T1M.png'));
+    %imwrite(final, strcat('./rezultat_izboljsava_median/', file.name));
+    %%for medfilt2
+    imwrite(final, strcat('./rezultat_izboljsava/', file.name));
     %Show final edge detection result
     figure, imshow(final); title('final1');
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%end
+end
