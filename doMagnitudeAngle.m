@@ -5,12 +5,12 @@
     slice = imread('0001.png');
 
     sigma=min(size(slice))*0.005;
-    %fslice = imgaussfilt(im2double(slice), sigma); %sigma is a value od standard deviation
-    %figure; imshow(fslice, [min(fslice(:)),max(fslice(:))]); title('Gaussian smoothing');
+    fslice = imgaussfilt(im2double(slice), sigma); %sigma is a value od standard deviation
+    figure; imshow(fslice, [min(fslice(:)),max(fslice(:))]); title('Gaussian smoothing');
     
     %%%%%%%%%%%%IZBOLJSAVA%%%%%%%%%%%%%%%
-    fslice= medfilt2(slice);
-    figure; imshow(fslice, [min(fslice(:)),max(fslice(:))]); title('Median smoothing');
+    %fslice= medfilt2(slice);
+    %figure; imshow(fslice, [min(fslice(:)),max(fslice(:))]); title('Median smoothing');
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     % Prewitt mask/cross
