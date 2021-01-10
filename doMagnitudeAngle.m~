@@ -1,12 +1,12 @@
 %files = dir('./images/*.png');
 
 %for file = files'
-%    slice = imread(strcat('./images/', file.name));
+  %  slice = imread(strcat('./images/', file.name));
     slice = imread('0001.png');
 
     sigma=min(size(slice))*0.005;
-    %fslice = imgaussfilt(im2double(slice), sigma); %sigma is a value od standard deviation
-    fslice= medfilt2(slice);
+    fslice = imgaussfilt(im2double(slice), sigma); %sigma is a value od standard deviation
+    %fslice= medfilt2(slice);
     figure; imshow(fslice, [min(fslice(:)),max(fslice(:))]); title('Gaussian smoothing');
 
     % Prewitt mask/cross
@@ -36,13 +36,13 @@
 
     for i=1:x
         for j=1:y
-            if ((ang(i,j) > 0) && (ang(i,j) < 22.5) || (ang(i,j) > 157.5) && (ang(i,j) < -157.5))
+            if ((ang(i,j) >= -22.5) && (ang(i,j) < 22.5) || (ang(i,j) <= 157.5) && (ang(i,j) >= -157.5))
                 ang_1(i,j) = 0;
-            elseif ((ang(i,j) > 22.5) && (ang(i,j) < 67.5) || (ang(i,j) < -112.5) && (ang(i,j) > -157.5))
+            elseif ((ang(i,j) >= 22.5) && (ang(i,j) < 67.5) || (ang(i,j) < -112.5) && (ang(i,j) > -157.5))
                 ang_1(i,j) = 45;
-            elseif ((ang(i,j) > 67.5 && ang(i,j) < 112.5) || (ang(i,j) < -67.5 && ang(i,j) > 112.5))
+            elseif ((ang(i,j) >= 67.5 && ang(i,j) < 112.5) || (ang(i,j) < -67.5 && ang(i,j) >= -112.5))
                 ang_1(i,j) = 90;       
-            elseif ((ang(i,j) > 112.5 && ang(i,j) <= 157.5) || (ang(i,j) < -22.5 && ang(i,j) > -67.5))
+            elseif ((ang(i,j) >= 112.5 && ang(i,j) < 157.5) || (ang(i,j) < -22.5 && ang(i,j) >= -67.5))
                 ang_1(i,j) = 135;
             end
         end
@@ -54,8 +54,16 @@
         for j=2:y-1
             if (ang_1(i,j)==0)
                 im(i,j) = (mag(i,j) == max([mag(i,j), mag(i,j+1), mag(i,j-1)]));
+                %{
+                if (mag(i, j) > mag(i, j - 1) && mag(i, j) > mag(i, j + 1))
+                    im(i, j) = mag(i, j);
+                else
+                    im(i, j) = 0;  
+                end
+                %}
             elseif (ang_1(i,j)==45)
                 im(i,j) = (mag(i,j) == max([mag(i,j), mag(i+1,j-1), mag(i-1,j+1)]));
+
             elseif (ang_1(i,j)==90)
                 im(i,j) = (mag(i,j) == max([mag(i,j), mag(i+1,j), mag(i-1,j)]));
             elseif (ang_1(i,j)==135)
@@ -95,7 +103,7 @@
     figure; imshow(T); title('Hysteresis thresholding');
 
     final = im2uint8(T);
-    imwrite(final, strcat('0001_TM.png'));
+    imwrite(final, strcat('0001_TG.png'));
     %Show final edge detection result
     figure, imshow(final); title('final');
 
@@ -121,9 +129,8 @@
     figure; imshow(T1); title('Hysteresis thresholding T1');
 
     final = im2uint8(T1);
-    imwrite(final, strcat('0001_T1M.png'));
+    imwrite(final, strcat('0001_T1G.png'));
     %Show final edge detection result
     figure, imshow(final); title('final1');
-
 
 %end

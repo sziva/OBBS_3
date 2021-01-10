@@ -1,13 +1,17 @@
-files = dir('./images/*.png');
+%files = dir('./images/*.png');
 
-for file = files'
-    slice = imread(strcat('./images/', file.name));
-    %slice = imread('0001.png');
+%for file = files'
+  %  slice = imread(strcat('./images/', file.name));
+    slice = imread('0001.png');
 
     sigma=min(size(slice))*0.005;
     fslice = imgaussfilt(im2double(slice), sigma); %sigma is a value od standard deviation
-    %fslice= medfilt2(slice);
     figure; imshow(fslice, [min(fslice(:)),max(fslice(:))]); title('Gaussian smoothing');
+    
+    %%%%%%%%%%%%IZBOLJSAVA%%%%%%%%%%%%%%%
+   % fslice= medfilt2(slice);
+   % figure; imshow(fslice, [min(fslice(:)),max(fslice(:))]); title('Median smoothing');
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     % Prewitt mask/cross
     kx = [-1 0 +1; -1 0 +1; -1 0 +1];
@@ -36,13 +40,13 @@ for file = files'
 
     for i=1:x
         for j=1:y
-            if ((ang(i,j) > 0) && (ang(i,j) < 22.5) || (ang(i,j) > 157.5) && (ang(i,j) < -157.5))
+            if ((ang(i,j) >= -22.5) && (ang(i,j) <= 22.5) || (ang(i,j) <= 157.5) && (ang(i,j) >= -157.5))
                 ang_1(i,j) = 0;
             elseif ((ang(i,j) > 22.5) && (ang(i,j) < 67.5) || (ang(i,j) < -112.5) && (ang(i,j) > -157.5))
                 ang_1(i,j) = 45;
-            elseif ((ang(i,j) > 67.5 && ang(i,j) < 112.5) || (ang(i,j) < -67.5 && ang(i,j) > 112.5))
+            elseif ((ang(i,j) >= 67.5 && ang(i,j) <= 112.5) || (ang(i,j) <= -67.5 && ang(i,j) >= -112.5))
                 ang_1(i,j) = 90;       
-            elseif ((ang(i,j) > 112.5 && ang(i,j) <= 157.5) || (ang(i,j) < -22.5 && ang(i,j) > -67.5))
+            elseif ((ang(i,j) > 112.5 && ang(i,j) < 157.5) || (ang(i,j) < -22.5 && ang(i,j) > -67.5))
                 ang_1(i,j) = 135;
             end
         end
@@ -92,6 +96,8 @@ for file = files'
         end
     end
 
+    
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%IZBOLJSAVA%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     figure; imshow(T); title('Hysteresis thresholding');
 
     final = im2uint8(T);
@@ -124,5 +130,6 @@ for file = files'
     imwrite(final, strcat('0001_T1G.png'));
     %Show final edge detection result
     figure, imshow(final); title('final1');
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-end
+%end
